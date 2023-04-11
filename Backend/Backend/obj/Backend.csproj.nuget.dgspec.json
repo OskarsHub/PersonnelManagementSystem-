@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Koodit\\University's personnel management system\\Backend\\Backend\\Backend.csproj": {}
+    "C:\\Koodit\\PersonnelManagementSystem\\Backend\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\Koodit\\University's personnel management system\\Backend\\Backend\\Backend.csproj": {
+    "C:\\Koodit\\PersonnelManagementSystem\\Backend\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Koodit\\University's personnel management system\\Backend\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Koodit\\PersonnelManagementSystem\\Backend\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Koodit\\University's personnel management system\\Backend\\Backend\\Backend.csproj",
+        "projectPath": "C:\\Koodit\\PersonnelManagementSystem\\Backend\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\Oskari\\.nuget\\packages\\",
-        "outputPath": "C:\\Koodit\\University's personnel management system\\Backend\\Backend\\obj\\",
+        "outputPath": "C:\\Koodit\\PersonnelManagementSystem\\Backend\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Oskari\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -55,6 +55,16 @@
             "Microsoft.EntityFrameworkCore.InMemory": {
               "target": "Package",
               "version": "[7.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.5, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

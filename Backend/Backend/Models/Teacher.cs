@@ -1,8 +1,11 @@
-﻿namespace Backend.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Backend.Models
 {
     public class Teacher
     {
 
+        [Key]
         public Guid Teacher_Id { get; set; }
 
         public string First_name { get; set; }

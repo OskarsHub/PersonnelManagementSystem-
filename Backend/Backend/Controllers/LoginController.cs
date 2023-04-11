@@ -24,7 +24,11 @@ namespace Backend.Controllers
             this.dbTeacher = dbTeacher;
         }
 
-
+        /// <summary>
+        /// Login method
+        /// </summary>
+        /// <param name="LoginRequest"></param>
+        /// <returns>Token if login was successful</returns>
         [HttpPost]
         public IActionResult Login(LoginRequest LoginRequest)
         {
@@ -70,6 +74,11 @@ namespace Backend.Controllers
 
         }
 
+        /// <summary>
+        /// Creates JWT token for student
+        /// </summary>
+        /// <param name="user">Student</param>
+        /// <returns>JWT Token</returns>
         private string CreateToken(Student user)
         {
             string Id = user.Student_Id.ToString();
@@ -95,6 +104,11 @@ namespace Backend.Controllers
             return jwt;
         }
 
+        /// <summary>
+        /// Creates JWT token for teacher
+        /// </summary>
+        /// <param name="user">Teacher</param>
+        /// <returns>JWT Token/returns>
         private string CreateToken(Teacher user)
         {
             string Id = user.Teacher_Id.ToString();

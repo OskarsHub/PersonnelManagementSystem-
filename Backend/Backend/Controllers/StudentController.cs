@@ -18,16 +18,58 @@ namespace Backend.Controllers
             this.dbStudent = dbStudent;
         }
 
+        /// <summary>
+        /// Retrieves every students information
+        /// </summary>
+        /// <returns>information of every student</returns>
         [HttpGet, Authorize(Roles = "Teacher")]
         public async Task <IActionResult> GetStudents()
         {
-            return Ok(await dbStudent.Students.ToListAsync());
+            var students = await dbStudent.Students
+                                         .Select(s => new { s.Student_Id, s.First_name, s.Last_name, s.Email, s.Phonenumber })
+                                         .ToListAsync();
+
+            return Ok(students);
         }
 
+        /// <summary>
+        /// Retrieves information for a specific student
+        /// </summary>
+        /// <param name="id">Student id</param>
+        /// <returns>information of specific student</returns>
+        [HttpGet]
+        [Route ("{id:guid}")]
+        public async Task<IActionResult> GetStudent([FromRoute] Guid id)
+        {
+            var student = await dbStudent.Students
+                                         .Where(s => s.Student_Id == id)
+                                         .Select(s => new {s.First_name, s.Last_name, s.Email, s.Phonenumber})
+                                         .ToListAsync();
+
+            if (student == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            return Ok(student);
+        }
+
+        /// <summary>
+        /// Registers new student to database
+        /// </summary>
+        /// <param name="AddStudentRequest"></param>
+        /// <returns>Returns bad request if email is already in use. Returns OK if registration succeeds</returns>
         [HttpPost, AllowAnonymous]
         public async Task<IActionResult> AddStudent(AddStudentRequest AddStudentRequest)
-        { 
-        
+        {
+
+            var checkEmail = dbStudent.Students.FirstOrDefault(s => s.Email == AddStudentRequest.Email);
+
+            if (checkEmail != null)
+            {
+                return BadRequest("Email is already in use");
+            }
+
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(AddStudentRequest.Password);
 
             var student = new Student()
@@ -44,7 +86,7 @@ namespace Backend.Controllers
             await dbStudent.Students.AddAsync(student);
             await dbStudent.SaveChangesAsync();
 
-            return Ok(student);
+            return Ok();
         }
     }
 }

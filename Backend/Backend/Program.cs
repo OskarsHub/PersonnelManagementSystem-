@@ -39,7 +39,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddDbContext<BackendAPIDbContext>(options => options.UseInMemoryDatabase("BackendDB"));
+builder.Services.AddDbContext<BackendAPIDbContext>(options => 
+options.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")));
 
 var app = builder.Build();
 

@@ -19,15 +19,57 @@ namespace Backend.Controllers
             this.dbTeacher = dbTeacher;
         }
 
+        /// <summary>
+        /// Retrieves every teachers information
+        /// </summary>
+        /// <returns>information of every student</returns>
         [HttpGet]
         public async Task <IActionResult> GetTeachers()
         {
-            return Ok(await dbTeacher.Teachers.ToListAsync());
+            var teacher = await dbTeacher.Teachers
+                                         .Select(s => new { s.Teacher_Id, s.First_name, s.Last_name, s.Email, s.Phonenumber })
+                                         .ToListAsync();
+
+            return Ok(teacher);
         }
 
+        /// <summary>
+        /// Retrieves information for a specific teacher
+        /// </summary>
+        /// <param name="id">Student id</param>
+        /// <returns>information of specific student</returns>
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> GetTeacher([FromRoute] Guid id)
+        {
+            var teacher = await dbTeacher.Teachers
+                                         .Where(s => s.Teacher_Id == id)
+                                         .Select(s => new { s.First_name, s.Last_name, s.Email, s.Phonenumber })
+                                         .ToListAsync();
+
+            if (teacher == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            return Ok(teacher);
+        }
+
+        /// <summary>
+        /// Registers new teacher to database
+        /// </summary>
+        /// <param name="AddTeacherRequest"></param>
+        /// <returns>Returns bad request if email is already in use. Returns OK if registration succeeds</returns>
         [HttpPost, AllowAnonymous]
         public async Task<IActionResult> AddTeacher(AddTeacherRequest AddTeacherRequest)
         {
+
+            var checkEmail = dbTeacher.Teachers.FirstOrDefault(s => s.Email == AddTeacherRequest.Email);
+
+            if (checkEmail != null)
+            {
+                return BadRequest("Email is already in use");
+            }
 
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(AddTeacherRequest.Password);
 
