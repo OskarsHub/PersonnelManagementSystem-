@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
@@ -17,5 +16,8 @@ namespace Backend.Models
 
         public Guid Teacher_Id { get; set; }
         public Teacher Teacher { get;set; }
+
+
+        public ICollection<CourseRegistration> CourseRegistration { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Backend.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace Backend.Data
 {
@@ -17,6 +16,18 @@ namespace Backend.Data
                 .WithMany(e => e.Courses)
                 .HasForeignKey(e => e.Teacher_Id)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CourseRegistration>()
+                .HasOne(e => e.Student)
+                .WithMany(e => e.CourseRegistration)
+                .HasForeignKey(e => e.Student_Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CourseRegistration>()
+                .HasOne(e => e.Course)
+                .WithMany(e => e.CourseRegistration)
+                .HasForeignKey(e => e.Course_Id)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<Student> Students { get; set; }
@@ -24,5 +35,7 @@ namespace Backend.Data
         public DbSet<Teacher> Teachers { get; set; }
 
         public DbSet<Course> Courses { get; set; }
+
+        public DbSet<CourseRegistration> CourseRegistrations { get; set; }
     }
 }

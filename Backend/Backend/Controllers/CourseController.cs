@@ -8,24 +8,38 @@ namespace Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CourseController : Controller
     {
         private readonly BackendAPIDbContext dbCourse;
-        private readonly BackendAPIDbContext dbTeacher;
 
         public CourseController(BackendAPIDbContext dbCourse, BackendAPIDbContext dbTeacher)
         {
             this.dbCourse = dbCourse;
-            this.dbTeacher = dbTeacher;
         }
+
         /// <summary>
         /// Retrieves list of all courses
         /// </summary>
         /// <returns>list of all courses</returns>
-        [HttpGet]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> GetCourses()
         {
             return Ok(await dbCourse.Courses.ToListAsync());
+        }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> GetCourse([FromRoute] Guid id)
+        {
+            var course = await dbCourse.Courses.Where(s => s.Course_Id == id).ToListAsync();
+
+            if (course == null)
+            {
+                return BadRequest("Course not found");
+            }
+
+            return Ok(course);
         }
 
         /// <summary>
@@ -33,7 +47,7 @@ namespace Backend.Controllers
         /// </summary>
         /// <param name="AddCourseRequest"></param>
         /// <returns>OK</returns>
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Teacher")]
         public async Task<IActionResult> AddCourse(AddCourseRequest AddCourseRequest)
         {
 

@@ -86,7 +86,7 @@ namespace Backend.Controllers
             await dbStudent.Students.AddAsync(student);
             await dbStudent.SaveChangesAsync();
 
-            return Ok();
+            return Ok(student);
         }
     }
 }

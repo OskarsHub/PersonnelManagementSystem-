@@ -19,5 +19,8 @@ namespace Backend.Models
         public string Phonenumber { get; set; }
 
         public string Password { get; set; }
+
+
+        public ICollection<CourseRegistration> CourseRegistration { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(BackendAPIDbContext))]
-    [Migration("20230411170746_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20230412190705_Initial migration")]
+    partial class Initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,30 @@ namespace Backend.Migrations
                     b.HasIndex("Teacher_Id");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("Backend.Models.CourseRegistration", b =>
+                {
+                    b.Property<Guid>("CourseRegistration_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Course_Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("Student_Id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CourseRegistration_Id");
+
+                    b.HasIndex("Course_Id");
+
+                    b.HasIndex("Student_Id");
+
+                    b.ToTable("CourseRegistrations");
                 });
 
             modelBuilder.Entity("Backend.Models.Student", b =>
@@ -127,6 +151,35 @@ namespace Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Backend.Models.CourseRegistration", b =>
+                {
+                    b.HasOne("Backend.Models.Course", "Course")
+                        .WithMany("CourseRegistration")
+                        .HasForeignKey("Course_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Models.Student", "Student")
+                        .WithMany("CourseRegistration")
+                        .HasForeignKey("Student_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Backend.Models.Course", b =>
+                {
+                    b.Navigation("CourseRegistration");
+                });
+
+            modelBuilder.Entity("Backend.Models.Student", b =>
+                {
+                    b.Navigation("CourseRegistration");
                 });
 
             modelBuilder.Entity("Backend.Models.Teacher", b =>

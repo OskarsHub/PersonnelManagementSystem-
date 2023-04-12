@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initialmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -65,6 +65,42 @@ namespace Backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CourseRegistrations",
+                columns: table => new
+                {
+                    CourseRegistration_Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Student_Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Course_Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseRegistrations", x => x.CourseRegistration_Id);
+                    table.ForeignKey(
+                        name: "FK_CourseRegistrations_Courses_Course_Id",
+                        column: x => x.Course_Id,
+                        principalTable: "Courses",
+                        principalColumn: "Course_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourseRegistrations_Students_Student_Id",
+                        column: x => x.Student_Id,
+                        principalTable: "Students",
+                        principalColumn: "Student_Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseRegistrations_Course_Id",
+                table: "CourseRegistrations",
+                column: "Course_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseRegistrations_Student_Id",
+                table: "CourseRegistrations",
+                column: "Student_Id");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_Teacher_Id",
                 table: "Courses",
@@ -74,6 +110,9 @@ namespace Backend.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CourseRegistrations");
+
             migrationBuilder.DropTable(
                 name: "Courses");
 
